@@ -1,0 +1,20 @@
+//how to export and import
+/*
+use js object to return multiple things
+module.exports ={
+add,
+sub
+}
+
+exports.add = (a,b) => a+b ;
+*/
+
+/*
+const {add , sub } = require("path.name");
+these are commonJs type import export
+*/
+
+/*
+named export - multiple helpers
+default export - one main thing per file
+*/

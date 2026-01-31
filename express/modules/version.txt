@@ -1,0 +1,29 @@
+//version
+
+5.1.0
+
+1st part -> 5
+2nd part -> 1
+3rd part -> 0
+
+// 3rd part (lat part) - minor fixes(optional)
+latest-> 5.1.0
+
+// 2nd part - recommended bug fix(security fix)
+
+//1st major release - major / breaking upgrade
+
+^ - dont change the major release version 
+~ - dont change even recommended bug
+
+//RESTful-api
+a web api that follows REST principles
+REST defines rules like-
+1. Client–Server separation
+2. Statelessness
+3. Resource-based URLs
+4. Use of HTTP methods
+5. Uniform interface
+
+all RESTful APIs are APIs..
+not all APIs are RESTful

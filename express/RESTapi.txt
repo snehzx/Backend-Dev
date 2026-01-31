@@ -1,0 +1,8 @@
+
+representational state transfer
+application programming interface
+they are all about communication(client and server)
+restful web service - (service that uses rest api to communicate)
+it basically like - client gives an http req to a server (rest lies is between giving all the rules on how to send and receive)and in res server sends a res in json 
+it is mostly used for crud apps
+its a way of designing apis using http
