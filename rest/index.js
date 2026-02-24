@@ -1,20 +1,36 @@
 const express = require("express");
 const users = require("./MOCK_DATA.json");
+const fs = require("fs");
+
 const app = express();
 const PORT = 8000;
+
+//middleware-plugin
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(async (req, res, next) => {
+  await fs.promises.appendFile(
+    "log.txt",
+    `\n${Date.now()}:${req.method}:${req.path}`,
+  );
+  next();
+});
 
 //routes
 app.get("/users", (req, res) => {
   const html = `
     <ul>
     ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
-    
+    </ul>
     `;
   res.send(html);
 });
 
 //rest api
 app.get("/api/users", (req, res) => {
+  res.setHeader("X-myName", "xyz"); //custom header
+  // always add X to custom headers
+  console.log(req.headers);
   return res.json(users);
 });
 
@@ -25,17 +41,52 @@ app
     const user = users.find((user) => user.id === id);
     return res.json(user);
   })
-  .put((req, res) => {
-    //todo:create new user
-    return res.json({ status: "pending" });
-  })
   .patch((req, res) => {
-    //todo:edit the user with id
-    return res.json({ status: "pending" });
+    const id = Number(req.params.id);
+    const body = req.body;
+    const user = users.find((u) => {
+      return u.id === id;
+    });
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    Object.assign(user, body);
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err) => {
+      if (err) {
+        return res.status(500).json({ message: "error writing file" });
+      }
+
+      return res.json({ message: "user updated", user });
+    });
   })
   .delete((req, res) => {
-    //todo:delete user with id
-    return res.json({ status: "pending" });
+    const id = Number(req.params.id);
+    const index = users.findIndex((u) => {
+      return u.id === id;
+    });
+    if (index === -1) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    users.splice(index, 1);
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err) => {
+      if (err) {
+        return res.status(500).json({ message: "error writing file" });
+      }
+
+      return res.json({ message: "user deleted", index });
+    });
   });
+app.post("/api/users", (req, res) => {
+  const body = req.body;
+  users.push({ ...body, id: users.length + 1 });
+  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+    if (err) {
+      return res.status(500).json({ message: "error writting file" });
+    } else {
+      return res.json({ status: "success", id: users.length });
+    }
+  });
+  //todo create new user
+});
 
 app.listen(PORT, () => console.log(`server started at port ${PORT}`));

@@ -1,0 +1,1 @@
+an http header is a field of an http req that passes additional context and metadata about the req and res
