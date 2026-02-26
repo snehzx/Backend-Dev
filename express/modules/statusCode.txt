@@ -1,0 +1,5 @@
+info res (100-199)
+successful res(200-299)
+redirection msg(300-399)
+client err res(400-499)
+servver err res(500-599)
